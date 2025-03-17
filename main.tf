@@ -14,7 +14,7 @@ resource "aws_subnet" "devops_subnet" {
   count = 2
   vpc_id                  = aws_vpc.devops_vpc.id
   cidr_block              = cidrsubnet(aws_vpc.devops_vpc.cidr_block, 8, count.index)
-  availability_zone       = element(["us-east-1a", "ap-east-1b"], count.index)
+  availability_zone       = element(["us-east-1a", "us-east-1b"], count.index)
   map_public_ip_on_launch = true
 
   tags = {
@@ -65,7 +65,7 @@ resource "aws_security_group" "devops_cluster_sg" {
 }
 
 resource "aws_security_group" "devops_node_sg" {
-  vpc_id = aws_vpc.devopsshack_vpc.id
+  vpc_id = aws_vpc.devops_vpc.id
 
   ingress {
     from_port   = 0
@@ -91,8 +91,8 @@ resource "aws_eks_cluster" "devops" {
   role_arn = aws_iam_role.devops_cluster_role.arn
 
   vpc_config {
-    subnet_ids         = aws_subnet.devopsshack_subnet[*].id
-    security_group_ids = [aws_security_group.devopsshack_cluster_sg.id]
+    subnet_ids         = aws_subnet.devops_subnet[*].id
+    security_group_ids = [aws_security_group.devops_cluster_sg.id]
   }
 }
 
