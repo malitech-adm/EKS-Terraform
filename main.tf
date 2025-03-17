@@ -86,9 +86,9 @@ resource "aws_security_group" "cluster_node_sg" {
   }
 }
 
-resource "aws_eks_cluster" "cicd" {
-  name     = "eks-cluster"
-  role_arn = aws_iam_role.cicd_cluster_role.arn
+resource "aws_eks_cluster" "devopsshack" {
+  name     = "devopsshack-cluster"
+  role_arn = aws_iam_role.devopsshack_cluster_role.arn
 
   vpc_config {
     subnet_ids         = aws_subnet.cluster_subnet[*].id
@@ -96,10 +96,10 @@ resource "aws_eks_cluster" "cicd" {
   }
 }
 
-resource "aws_eks_node_group" "cicd_ng" {
-  cluster_name    = aws_eks_cluster.cluster.name
+resource "aws_eks_node_group" "devopsshack" {
+  cluster_name    = aws_eks_cluster.devopsshack.name
   node_group_name = "eks-node-group"
-  node_role_arn   = aws_iam_role.cicd_ng_node_group_role.arn
+  node_role_arn   = aws_iam_role.devopsshack_node_group_role.arn
   subnet_ids      = aws_subnet.cluster_subnet[*].id
 
   scaling_config {
